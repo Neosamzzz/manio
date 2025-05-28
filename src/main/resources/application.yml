@@ -1,0 +1,52 @@
+spring:
+    application:
+        name: manio
+
+    datasource:
+        url: jdbc:mysql://47.97.156.112:3306/manio?useSSL=false&serverTimezone=UTC
+        username: LSJ
+        password: 123456
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+    jpa:
+        hibernate:
+            ddl-auto: none
+        database-platform: org.hibernate.dialect.MySQL8Dialect
+        show-sql: true
+    knife4j:
+        enable: true
+        setting:
+            language: zh-CN
+            enable-swagger-models: true
+            swagger-model-name: 实体类列表
+            enable-document-manage: true
+            enable-version-strategy: false
+            enable-filter-multipart-api-method-type: POST
+            enable-request-cache: true
+            enable-host: false
+            enable-host-text: 192.168.0.1:8080
+            enable-home-custom: true
+            home-custom-path: /doc.html
+            enable-search: true
+            enable-footer: false
+            enable-footer-custom: true
+            footer-custom-content: Apache License 2.0 | Copyright  2023-present [Your Name]
+            enable-dynamic-parameter: true
+            enable-debug: true
+            enable-open-api: false
+            enable-group: true
+        cors: true
+        production: false
+    logging:
+        level:
+            org.springframework.web: DEBUG
+            org.springdoc: DEBUG
+server:
+    port: 8080
+    address: 0.0.0.0
+#Mybatis的相关配置
+mybatis:
+    configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+        map-underscore-to-camel-case: true

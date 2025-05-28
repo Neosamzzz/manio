@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>商品管理</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px;}
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        input, button { margin: 2px; }
+    </style>
+</head>
+<body>
+    <h1>商品管理</h1>
+    <button onclick="loadProducts()">刷新商品列表</button>
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>描述</th>
+                <th>价格</th>
+                <th>分类ID</th>
+                <th>排序</th>
+                <th>封面图</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>新增/修改商品</h2>
+    <form id="productForm" onsubmit="return false;">
+        <input type="hidden" id="id">
+        <input type="text" id="name" placeholder="名称" required>
+        <input type="text" id="description" placeholder="描述">
+        <input type="number" id="price" placeholder="价格" required>
+        <input type="number" id="categoryId" placeholder="分类ID">
+        <input type="number" id="sort" placeholder="排序">
+        <input type="text" id="coverImg" placeholder="封面图URL">
+        <input type="number" id="status" placeholder="状态">
+        <input type="datetime-local" id="createTime" placeholder="创建时间">
+        <button onclick="submitProduct()">提交</button>
+        <button onclick="resetForm()">重置</button>
+    </form>
+
+    <script>
+        const API_BASE = 'http://47.97.156.112:90/ProductManage';
+
+        function loadProducts() {
+            axios.get(API_BASE)
+                .then(res => {
+                    const data = res.data;
+                    if ((data.code === 0 || data.code === 200) && Array.isArray(data.data)) {
+                        const tbody = document.querySelector('#productTable tbody');
+                        tbody.innerHTML = '';
+                        data.data.forEach(product => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td>${product.id}</td>
+                                <td>${product.name}</td>
+                                <td>${product.description}</td>
+                                <td>${product.price}</td>
+                                <td>${product.categoryId ?? ''}</td>
+                                <td>${product.sort}</td>
+                                <td>${product.coverImg ? `<img src="${product.coverImg}" style="max-width:60px;max-height:60px;">` : ''}</td>
+                                <td>${product.status}</td>
+                                <td>${product.createTime ?? ''}</td>
+                                <td>
+                                    <button onclick='editProduct(${JSON.stringify(product)})'>编辑</button>
+                                    <button onclick='deleteProduct(${product.id})'>删除</button>
+                                </td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        alert('获取商品数据失败');
+                    }
+                })
+                .catch(err => {
+                    alert('请求出错: ' + err);
+                });
+        }
+
+        function submitProduct() {
+            const id = document.getElementById('id').value;
+            const product = {
+                id: id ? Number(id) : undefined,
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                price: Number(document.getElementById('price').value),
+                categoryId: document.getElementById('categoryId').value ? Number(document.getElementById('categoryId').value) : undefined,
+                sort: document.getElementById('sort').value ? Number(document.getElementById('sort').value) : undefined,
+                coverImg: document.getElementById('coverImg').value,
+                status: document.getElementById('status').value ? Number(document.getElementById('status').value) : undefined,
+                createTime: document.getElementById('createTime').value
+            };
+            if (id) {
+                // 修改
+                axios.put(API_BASE, product)
+                    .then(() => {
+                        alert('修改成功');
+                        loadProducts();
+                        resetForm();
+                    })
+                    .catch(err => alert('修改失败: ' + err));
+            } else {
+                // 新增
+                axios.post(API_BASE, product)
+                    .then(() => {
+                        alert('新增成功');
+                        loadProducts();
+                        resetForm();
+                    })
+                    .catch(err => alert('新增失败: ' + err));
+            }
+        }
+
+        function editProduct(product) {
+            document.getElementById('id').value = product.id;
+            document.getElementById('name').value = product.name;
+            document.getElementById('description').value = product.description;
+            document.getElementById('price').value = product.price;
+            document.getElementById('categoryId').value = product.categoryId ?? '';
+            document.getElementById('sort').value = product.sort ?? '';
+            document.getElementById('coverImg').value = product.coverImg ?? '';
+            document.getElementById('status').value = product.status ?? '';
+            document.getElementById('createTime').value = product.createTime ? product.createTime.substring(0, 16) : '';
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('确定要删除吗？')) return;
+            axios.delete(`${API_BASE}/${id}`)
+                .then(() => {
+                    alert('删除成功');
+                    loadProducts();
+                })
+                .catch(err => alert('删除失败: ' + err));
+        }
+
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('id').value = '';
+        }
+
+        // 页面加载时自动加载商品列表
+        loadProducts();
+    </script>
+</body>
+</html>
