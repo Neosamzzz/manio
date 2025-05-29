@@ -7,7 +7,12 @@ spring:
         username: LSJ
         password: 123456
         driver-class-name: com.mysql.cj.jdbc.Driver
-
+    servlet:
+        multipart:
+            #单个文件大小
+            max-file-size: 100MB
+            #最大请求大小（包括表单所有数据）
+            max-request-size: 100MB
 
     jpa:
         hibernate:
@@ -42,6 +47,12 @@ spring:
         level:
             org.springframework.web: DEBUG
             org.springdoc: DEBUG
+aliyun:
+    OSS:
+        bucketName: java-studyweb
+        endpoint: https://oss-cn-beijing.aliyuncs.com
+        region: cn-beijing
+
 server:
     port: 8080
     address: 0.0.0.0
@@ -50,3 +61,4 @@ mybatis:
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         map-underscore-to-camel-case: true
+
