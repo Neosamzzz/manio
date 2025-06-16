@@ -1,4 +1,4 @@
-package com.proj.manio.controller;
+package com.proj.manio.controller.admin;
 
 
 import com.proj.manio.pojo.Product;

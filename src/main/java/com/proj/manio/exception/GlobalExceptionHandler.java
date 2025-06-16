@@ -14,4 +14,16 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return Result.error("服务器异常，请稍后再试");
     }
+
+    @ExceptionHandler(NoLoginException.class)//未登录异常
+    public Result<String> handleException(HttpServletRequest request,NoLoginException e){
+        e.printStackTrace();
+        return Result.error("用户未登录，请登录");
+    }
+
+    @ExceptionHandler(AuthenticationFailedException.class)//未登录异常
+    public Result<String> handleException(HttpServletRequest request,AuthenticationFailedException e){
+        e.printStackTrace();
+        return Result.error("账号或密码错误");
+    }
 }

@@ -21,6 +21,6 @@ public class Result<T> {
     }
 
     public static <T> Result<T> error(String msg) {
-        return new Result<>(400, msg, null);
+        return new Result<>(500, msg, null);
     }
 }

@@ -1,6 +1,8 @@
 package com.proj.manio.config;
 
+import com.proj.manio.interceptor.AdminLoginInterceptor;
 import com.proj.manio.interceptor.LogInterceptor;
+import com.proj.manio.interceptor.UserLoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -12,10 +14,23 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private LogInterceptor logInterceptor;
 
+    @Autowired
+    private AdminLoginInterceptor adminLoginInterceptor;
+
+    @Autowired
+    private UserLoginInterceptor userLoginInterceptor;
+
     @Override
     public void addInterceptors (InterceptorRegistry interceptorRegistry){
         interceptorRegistry.addInterceptor(logInterceptor)
                 .addPathPatterns("/**");
+
+        interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin/login","/admin/register");
+
+        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
+                .addPathPatterns("/me","/cart");
     }
 
     @Override
