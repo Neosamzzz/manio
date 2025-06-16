@@ -22,6 +22,7 @@ public class AdminLoginInterceptor implements HandlerInterceptor {
         if (token == null || token.isEmpty()) {//没有token
             throw new NoLoginException();
         }
+        token = token.substring(7);
         Claims claims = jwtUtil.parseToken(token);
         Integer Id = claims.get("id", Integer.class);
         String identityType = claims.get("identityType", String.class);

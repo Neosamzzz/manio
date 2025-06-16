@@ -1,11 +1,12 @@
 package com.proj.manio.service;
 
+import com.github.pagehelper.PageInfo;
 import com.proj.manio.pojo.Product;
 
 import java.util.List;
 
 public interface ProductService {
-    public List<Product> getAllProduct();
+    public PageInfo<Product> getProduct(int pageNum);
 
     void addProduct(Product product);
 

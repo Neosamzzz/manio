@@ -17,6 +17,6 @@ public class UserLogin {
     private String password;
 
     @NotBlank(message = "非空")
-    @Schema(description = "登录账号是手机时为true，邮箱为false")
-    private boolean isPhone;
+    @Schema(description = "登录账号是邮箱时为true，手机号为false")
+    private boolean isEmail;
 }

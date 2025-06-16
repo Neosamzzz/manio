@@ -1,5 +1,7 @@
 package com.proj.manio.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.proj.manio.mapper.ProductMapper;
 import com.proj.manio.pojo.Product;
 import com.proj.manio.service.ProductService;
@@ -16,9 +18,11 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public List<Product> getAllProduct() {
-        List<Product> allProduct = productMapper.getAllProduct();
-        return allProduct;
+    public PageInfo<Product> getProduct(int pageNum) {
+        PageHelper.startPage(pageNum,10);
+        List<Product> products = productMapper.getProduct();
+
+        return new PageInfo<>(products);
     }
 
     @Override

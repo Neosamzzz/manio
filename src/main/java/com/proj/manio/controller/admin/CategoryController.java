@@ -1,9 +1,8 @@
-package com.proj.manio.controller;
+package com.proj.manio.controller.admin;
 
 
 import com.proj.manio.pojo.Category;
 import com.proj.manio.pojo.Result;
-import com.proj.manio.service.CategoryService;
 import com.proj.manio.service.impl.CategoryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

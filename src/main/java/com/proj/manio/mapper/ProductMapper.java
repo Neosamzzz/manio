@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public interface ProductMapper {
     @Select("SELECT * FROM product ORDER BY sort DESC")
-    List<Product> getAllProduct();
+    List<Product> getProduct();
 
     @Insert("INSERT INTO product(name, description, price, category_id ,sort ,cover_img, status) VALUES (#{name}, #{description}, #{price}, #{categoryId}, #{sort}, #{coverImg}, #{status})")
     void addProduct(Product product);

@@ -27,10 +27,10 @@ public class WebConfig implements WebMvcConfigurer {
 
         interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
                 .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/login","/admin/register");
+                .excludePathPatterns("/login/admin","/register/admin");
 
         interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
-                .addPathPatterns("/me","/cart");
+                .addPathPatterns("/login/user","/me","/cart");
     }
 
     @Override

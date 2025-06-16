@@ -1,6 +1,7 @@
 package com.proj.manio.controller.admin;
 
 
+import com.github.pagehelper.PageInfo;
 import com.proj.manio.pojo.Product;
 import com.proj.manio.pojo.Result;
 import com.proj.manio.service.impl.ProductServiceImpl;
@@ -19,9 +20,9 @@ public class ProductManageController {
     private ProductServiceImpl productServiceImpl;
 
     @GetMapping
-    @Operation(summary = "所有商品")
-    public Result<List<Product>> getProduct(){
-        return Result.success(productServiceImpl.getAllProduct());
+    @Operation(summary = "所有商品",description = "传入参数pageNum")
+    public Result<PageInfo<Product>> getProduct(@RequestParam(defaultValue = "1") int pageNum){
+        return Result.success(productServiceImpl.getProduct(pageNum));
     }
 
     @PostMapping

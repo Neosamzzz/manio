@@ -41,7 +41,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserLoginInfo userLogin(UserLogin userLogin) {
         UserLoginInfo userLoginInfo;
-        if(userLogin.isPhone()){
+        if(!userLogin.isEmail()){
             userLoginInfo = loginMapper.userLoginByPhone(userLogin);
         }else {
             userLoginInfo = loginMapper.userLoginByEmail(userLogin);
