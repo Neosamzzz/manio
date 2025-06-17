@@ -8,8 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper
-@Component
+
 public interface CartMapper {
     @Select("SELECT product_id,price,name,cover_img,quantity FROM cart c LEFT JOIN product p ON c.user_id = #{id} AND product_id = p.id")
     List<CartProduct> getCartById(int id);

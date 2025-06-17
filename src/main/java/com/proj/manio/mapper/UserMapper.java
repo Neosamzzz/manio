@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper
-@Component
+
 public interface UserMapper {
     @Select("SELECT id, username, name, gender FROM user")
     List<User> selectAllUsers();

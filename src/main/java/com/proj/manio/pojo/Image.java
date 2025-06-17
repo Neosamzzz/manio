@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart {
-    Long id;
-    int userId;
-    int productId;
-    int quantity;
+public class Image {
+    private int id;
+    private int productId;
+    private String imgUrl;
 }

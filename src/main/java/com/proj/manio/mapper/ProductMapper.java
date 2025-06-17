@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
-@Mapper
-@Component
+
 public interface ProductMapper {
     @Select("SELECT * FROM product ORDER BY sort DESC")
     List<Product> getProduct();

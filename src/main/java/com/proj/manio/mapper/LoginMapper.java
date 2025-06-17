@@ -11,8 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-@Mapper
-@Component
+
 public interface LoginMapper {
     @Select("SELECT * FROM admin WHERE username = #{username} AND password = #{password}")
     AdminLoginInfo adminLogin(Admin admin);

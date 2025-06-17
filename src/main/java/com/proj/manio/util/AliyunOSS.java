@@ -8,6 +8,8 @@ import com.aliyun.oss.common.auth.CredentialsProviderFactory;
 import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
 import com.aliyun.oss.common.comm.SignVersion;
 import com.aliyun.oss.ClientException;
+import com.aliyun.oss.model.OSSObjectSummary;
+import com.aliyun.oss.model.ObjectListing;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,13 +32,9 @@ public class AliyunOSS {
     @Value("${aliyun.OSS.region}")
     private String region;
 
-    public String uuidUpload(byte[] file, String fileName) throws com.aliyuncs.exceptions.ClientException, ClientException, IOException {
+    public String uuidUpload(byte[] file, String objectName) throws com.aliyuncs.exceptions.ClientException, ClientException, IOException {
 
-        //文件名称
-        String dir = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM"));
-        String fileType = fileName.substring(fileName.lastIndexOf("."));
-        String uuid = UUID.randomUUID().toString();
-        String objectName = dir+"/"+uuid+fileType;
+
 
 
         // 从环境变量中获取访问凭证。运行本代码示例之前，请先配置环境变量
@@ -57,6 +55,7 @@ public class AliyunOSS {
 
             ossClient.putObject(bucketName, objectName, new ByteArrayInputStream(file));
             System.out.println("文件 " + objectName + " 上传成功。");
+
 
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
