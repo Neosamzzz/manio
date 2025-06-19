@@ -1,16 +1,17 @@
 package com.proj.manio.mapper;
 
+import com.proj.manio.VO.ProductDetailVO;
+import com.proj.manio.pojo.Image;
 import com.proj.manio.pojo.Product;
+import com.proj.manio.pojo.Result;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 
-
+@Mapper
 public interface ProductMapper {
-    @Select("SELECT * FROM product ORDER BY sort DESC")
-    List<Product> getProduct();
+    List<Product> getProduct(int categoryId);
 
     @Insert("INSERT INTO product(name, description, price, category_id ,sort ,cover_img, status) VALUES (#{name}, #{description}, #{price}, #{categoryId}, #{sort}, #{coverImg}, #{status})")
     void addProduct(Product product);
@@ -23,4 +24,16 @@ public interface ProductMapper {
 
     @Delete("DELETE FROM product WHERE id = #{id}")
     void deleteById(Integer id);
+
+    @Insert("INSERT INTO image (product_id,img_url,sort) VALUES (#{productId},#{imgUrl},#{sort})")
+    void addDetailImage(Image img);
+
+    @Update("UPDATE image SET img_url=#{imgUrl},sort=#{sort} WHERE product_id = #{productId}")
+    void updateDetailImage(Image img);
+
+    @Delete("DELETE FROM image WHERE id = #{id}")
+    void deleteImageById(int id);
+
+    @Select("SELECT * FROM image WHERE product_id = #{id} ORDER BY sort")
+    List<Image> getImgById(Integer id);
 }
