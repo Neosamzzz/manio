@@ -38,6 +38,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+<!--		加密-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>6.3.3</version> <!-- 版本可按你项目 Spring Boot 版本匹配 -->
+		</dependency>
 
 		<dependency>
 			<groupId>com.mysql</groupId>

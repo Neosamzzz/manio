@@ -10,6 +10,7 @@ import com.proj.manio.service.LoginService;
 import com.proj.manio.util.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -23,10 +24,16 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private JWTUtil jwtUtil;
 
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     @Override
     public AdminLoginInfo adminLogin(Admin admin){
         AdminLoginInfo adminLoginInfo = loginMapper.adminLogin(admin);
         if(adminLoginInfo != null){
+            String pw = loginMapper.getAdminPassword(adminLoginInfo.getId());
+            if(!encoder.matches(admin.getPassword(),pw)){
+                throw new AuthenticationFailedException();
+            }
             log.info("管理员"+adminLoginInfo.getUsername()+"正在登录");
         }else {
             throw new AuthenticationFailedException();
@@ -46,14 +53,16 @@ public class LoginServiceImpl implements LoginService {
         }else {
             userLoginInfo = loginMapper.userLoginByEmail(userLogin);
         }
-        if(userLoginInfo != null){
+        if(userLoginInfo==null){
+            throw new AuthenticationFailedException();
+        }
+        String pw = loginMapper.getPassword(userLoginInfo.getId());
+        if(encoder.matches(userLogin.getPassword(),pw)){
             String Token = jwtUtil.generateUserToken(userLoginInfo);//根据user生成token
             userLoginInfo.setToken(Token);//设置token
             return userLoginInfo;
         }else{
             throw new AuthenticationFailedException();
         }
-
     }
-
 }

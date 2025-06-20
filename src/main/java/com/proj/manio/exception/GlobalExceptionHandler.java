@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationFailedException.class)//未登录异常
-    public Result<String> handleException(HttpServletRequest request,AuthenticationFailedException e){
+    public Result<String> handleException(HttpServletRequest request, AuthenticationFailedException e){
         e.printStackTrace();
         return Result.error("账号或密码错误");
     }

@@ -26,7 +26,7 @@ public class JWTUtil {
                 .compact();
     }
 
-    public static String generateUserToken(UserLoginInfo userLoginInfo) {//生成token
+    public static String generateUserToken(UserLoginInfo userLoginInfo) {//生成用户token
         return Jwts.builder()
                 .setSubject("user-login")
                 .claim("id", userLoginInfo.getId())
