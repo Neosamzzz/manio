@@ -1,14 +1,20 @@
 package com.proj.manio;
 
+import com.proj.manio.util.RedisUtil;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootTest
 class ManioApplicationTests {
 
+	@Autowired
+	private RedisUtil redisUtil;
 	@Test
-	void contextLoads() {
+	void test() {
+		System.out.println(Runtime.getRuntime().availableProcessors());
+
 	}
+
 
 }

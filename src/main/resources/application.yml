@@ -1,10 +1,20 @@
 spring:
+    redis:
+        host: 127.0.0.1
+        port: 6379
+        timeout: 5000
+        lettuce:
+            pool:
+                max-active: 8
+                max-idle: 8
+                min-idle: 0
+                max-wait: -1
     application:
         name: manio
     datasource:
-        url: jdbc:mysql://47.97.156.112:3306/manio?useSSL=false&serverTimezone=UTC
-        username: LSJ
-        password: 123456
+        url: jdbc:mysql://localhost:3306/manio?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
+        password: My123456!
         driver-class-name: com.mysql.cj.jdbc.Driver
     servlet:
         multipart:
@@ -60,4 +70,5 @@ mybatis:
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         map-underscore-to-camel-case: true
+
 

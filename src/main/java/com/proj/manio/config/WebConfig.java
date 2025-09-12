@@ -21,19 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
     private UserLoginInterceptor userLoginInterceptor;
 
     @Override
-    public void addInterceptors (InterceptorRegistry interceptorRegistry){
-        interceptorRegistry.addInterceptor(logInterceptor)
-                .addPathPatterns("/**");
-
-        interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
-                .addPathPatterns("/admin/**")
-                .excludePathPatterns("/login/admin","/register/admin");
-
-        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
-                .addPathPatterns("/login/user","/me","/cart");
-    }
-
-    @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // 所有路径
                 .allowedOriginPatterns("*") // 允许所有来源
@@ -41,6 +28,21 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
+
+    @Override
+    public void addInterceptors (InterceptorRegistry interceptorRegistry){
+        interceptorRegistry.addInterceptor(logInterceptor)
+                .addPathPatterns("/**");
+
+//        interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
+//                .addPathPatterns("/admin/**")
+//                .excludePathPatterns("/login/admin","/register/admin");
+
+        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
+                .addPathPatterns("/login/user","/me","/cart");
+    }
+
+
 
 
 }
