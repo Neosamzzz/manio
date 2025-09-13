@@ -14,5 +14,6 @@ public class ProductDetailVO {
     private String name;
     private BigDecimal price;
     private String description;
+    private Integer status;
     private String[] imgs;
 }

@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface ProductListMapper {
-    @Select("SELECT * FROM product WHERE category_id = #{categoryId}")
+    @Select("SELECT id AS productId, name, price, sort, cover_img AS coverImg FROM product WHERE category_id = #{categoryId} ORDER BY sort")
     List<ProductListVO> getByCategoryId(int categoryId);
 }

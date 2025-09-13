@@ -11,7 +11,7 @@ public class RedisUtil {
     private StringRedisTemplate redisTemplate;
 
     // 存入 key-value
-    public void set(String key, String value) {
+    public  void set(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
     }
 

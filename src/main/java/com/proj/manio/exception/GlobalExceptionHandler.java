@@ -26,4 +26,10 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return Result.error("账号或密码错误");
     }
+
+    @ExceptionHandler(ProductNotExistException.class)//未登录异常
+    public Result<String> handleException(HttpServletRequest request, ProductNotExistException e){
+        e.printStackTrace();
+        return Result.error("商品不存在");
+    }
 }

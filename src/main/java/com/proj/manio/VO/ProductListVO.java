@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 public class ProductListVO {
     private int productId;
     private BigDecimal price;
+    private int sort;//排序
     private String name;
     private String coverImg;
 }

@@ -1,5 +1,6 @@
 package com.proj.manio.config;
 
+
 import com.proj.manio.interceptor.AdminLoginInterceptor;
 import com.proj.manio.interceptor.LogInterceptor;
 import com.proj.manio.interceptor.UserLoginInterceptor;
@@ -37,9 +38,9 @@ public class WebConfig implements WebMvcConfigurer {
 //        interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
 //                .addPathPatterns("/admin/**")
 //                .excludePathPatterns("/login/admin","/register/admin");
-
-        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
-                .addPathPatterns("/login/user","/me","/cart");
+//
+//        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
+//                .addPathPatterns("/login/user","/me","/cart");
     }
 
 
