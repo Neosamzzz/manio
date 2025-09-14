@@ -1,4 +1,4 @@
-package com.proj.manio.controller;
+package com.proj.manio.controller.LoginAndRegister;
 
 
 import com.proj.manio.DTO.UserLogin;

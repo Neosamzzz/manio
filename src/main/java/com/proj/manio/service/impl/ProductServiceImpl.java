@@ -1,5 +1,6 @@
 package com.proj.manio.service.impl;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.proj.manio.VO.ProductDetailVO;
@@ -15,6 +16,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -35,15 +37,15 @@ public class ProductServiceImpl implements ProductService {
     public PageInfo<Product> getProduct(int pageNum,int categoryId) {
         String json = stringRedisTemplate.opsForValue().get("Manage:Category_Page:"+String.valueOf(categoryId)+"_"+String.valueOf(pageNum));
         if(json!=null){
-            return JsonUtil.fromJson(json, PageInfo.class);
+            return JsonUtil.fromJson(json, new TypeReference<PageInfo<Product>>() {});
         }
         PageHelper.startPage(pageNum,10);
         List<Product> products = productMapper.getProduct(categoryId);
         if (products==null|| products.isEmpty()){//为空时存空缓存
-            stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+String.valueOf(categoryId)+"_"+String.valueOf(pageNum),"[]",30,TimeUnit.MINUTES);
+            stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum),"[]",30,TimeUnit.MINUTES);
             return new PageInfo<>(Collections.emptyList());
         }
-        stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+String.valueOf(categoryId)+"_"+String.valueOf(pageNum),JsonUtil.toJson(products),30,TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+pageNum,JsonUtil.toJson(products),30,TimeUnit.MINUTES);
         return new PageInfo<>(products);
     }
 
