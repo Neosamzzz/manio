@@ -11,7 +11,9 @@ import com.proj.manio.pojo.Result;
 import com.proj.manio.service.ProductService;
 import com.proj.manio.util.JsonUtil;
 import io.swagger.v3.core.util.Json;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 public class ProductServiceImpl implements ProductService {
     @Autowired
@@ -35,9 +38,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public PageInfo<Product> getProduct(int pageNum,int categoryId) {
+        // 判断redis有没有更改
+        if(stringRedisTemplate.opsForValue().get("productChanged：categoryId:"+categoryId) != null){
+            stringRedisTemplate.delete("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum));
+        }
+
+
         String json = stringRedisTemplate.opsForValue().get("Manage:Category_Page:"+String.valueOf(categoryId)+"_"+String.valueOf(pageNum));
         if(json!=null){
-            return JsonUtil.fromJson(json, new TypeReference<PageInfo<Product>>() {});
+            return new PageInfo<>(JsonUtil.toList(json,Product.class));
         }
         PageHelper.startPage(pageNum,10);
         List<Product> products = productMapper.getProduct(categoryId);
@@ -49,34 +58,34 @@ public class ProductServiceImpl implements ProductService {
         return new PageInfo<>(products);
     }
 
+    @Transactional
     @Override
     public void addProduct(Product product) {
         product.setCreateTime(LocalDateTime.now());
         productMapper.addProduct(product);
+        stringRedisTemplate.opsForValue().set("productChanged：categoryId： "+product.getCategoryId(),String.valueOf(System.currentTimeMillis()));
     }
 
     @Override
     public Product getById(Integer id) {
-        String json = stringRedisTemplate.opsForValue().get("Manage:Product" + String.valueOf(id));
-
-        if(json!=null) {
-            return JsonUtil.fromJson(json,Product.class);
-        }
         Product product = productMapper.getById(id);
-        if(product!=null){
-            stringRedisTemplate.opsForValue().set("Manage:Product" + String.valueOf(id), JsonUtil.toJson(product), 60, TimeUnit.SECONDS);
-        }
         return product;
     }
 
+
+    @Transactional
     @Override
     public void updateProduct(Product product) {
         productMapper.updateProduct(product);
+        stringRedisTemplate.opsForValue().set("productChanged：categoryId： "+product.getCategoryId(),String.valueOf(System.currentTimeMillis()));
     }
 
+    @Transactional
     @Override
     public void deleteById(Integer id) {
+        Product product = productMapper.getById(id);
         productMapper.deleteById(id);
+        stringRedisTemplate.opsForValue().set("productChanged：categoryId： "+product.getCategoryId(),String.valueOf(System.currentTimeMillis()));
     }
 
     @Override

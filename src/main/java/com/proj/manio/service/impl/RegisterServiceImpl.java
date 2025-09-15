@@ -3,11 +3,13 @@ package com.proj.manio.service.impl;
 import cn.hutool.core.util.RandomUtil;
 import com.proj.manio.DTO.UserEmailRegister;
 import com.proj.manio.DTO.UserPhoneRegister;
+import com.proj.manio.VO.UserLoginInfo;
 import com.proj.manio.exception.NormalException;
 import com.proj.manio.mapper.RegisterMapper;
 import com.proj.manio.pojo.User;
 import com.proj.manio.service.RegisterService;
 import com.proj.manio.util.IdUtil;
+import com.proj.manio.util.JWTUtil;
 import com.proj.manio.util.RegexUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,18 +45,25 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public void ConfirmPhoneCode(UserPhoneRegister userPhoneRegister) {
+    public UserLoginInfo ConfirmPhoneCode(UserPhoneRegister userPhoneRegister) {
         String phone = userPhoneRegister.getPhone();
         Integer code = userPhoneRegister.getCode();
         if(!code.equals(Integer.parseInt(stringRedisTemplate.opsForValue().get("Phone:VarifiCode:"+phone)))){//从redis通过手机号码获取验证码
             throw new NormalException("手机号或者验证码错误");
         }
         User user = new User();
-        user.setId(IdUtil.generateUserIdByPhone(phone));
+        Integer id = IdUtil.generateUserIdByPhone(phone);
+        user.setId(id);
         user.setPhone(phone);
         user.setCreateTime(LocalDateTime.now());
         registerMapper.CreateUser(user);
 
+        UserLoginInfo ul = new UserLoginInfo();
+        ul.setId(id);
+        ul.setToken(JWTUtil.generateUserToken(ul));
+
+
+        return ul;
     }
 
     @Override
@@ -72,16 +81,25 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public void ConfirmEmailCode(UserEmailRegister userEmailRegister) {
+    public UserLoginInfo ConfirmEmailCode(UserEmailRegister userEmailRegister) {
         String email = userEmailRegister.getEmail();
         Integer code = userEmailRegister.getCode();
         if(!code.equals(Integer.parseInt(stringRedisTemplate.opsForValue().get("email:VarifiCode:"+email)))){//从redis通过手机号码获取验证码
             throw new NormalException("邮箱或者验证码错误");
         }
         User user = new User();
-        user.setId(IdUtil.generateUserIdByPhone(email));
+        Integer id = IdUtil.generateUserIdByPhone(email);
+        user.setId(id);
         user.setEmail(email);
         user.setCreateTime(LocalDateTime.now());
         registerMapper.CreateUser(user);
+
+
+        UserLoginInfo ul = new UserLoginInfo();
+        ul.setId(id);
+        ul.setToken(JWTUtil.generateUserToken(ul));
+
+
+        return ul;
     }
 }

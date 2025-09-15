@@ -1,7 +1,9 @@
 package com.proj.manio.controller.LoginAndRegister;
 
 import com.proj.manio.DTO.UserEmailRegister;
+import com.proj.manio.DTO.UserLogin;
 import com.proj.manio.DTO.UserPhoneRegister;
+import com.proj.manio.VO.UserLoginInfo;
 import com.proj.manio.pojo.Result;
 import com.proj.manio.service.impl.RegisterServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,19 +16,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/Register")
 @Tag(name="注册通用api")
-public class RegisterController {
+public class VarifiCodeController {
     @Autowired
     private RegisterServiceImpl registerServiceImpl;
 
     @GetMapping("/VarifiPhoneCode/{phone}")
-    @Operation(summary = "用户接受验证码")
+    @Operation(summary = "用户接受验证码（phone）")
     public Result<Void> getCodeByPhone(@PathVariable String phone){
         registerServiceImpl.getCodeByPhone(phone);
         return Result.success();
     }
 
     @GetMapping("/VarifiEmailCode/{email}")
-    @Operation(summary = "用户接受验证码")
+    @Operation(summary = "用户接受验证码（email）")
     public Result<Void> getCodeByEmail(@PathVariable String email){
         registerServiceImpl.getCodeByEmail(email);
         return Result.success();
@@ -34,15 +36,15 @@ public class RegisterController {
 
 
     @PostMapping("/ConfirmPhoneCode")
-    @Operation(summary = "确认验证码")
-    public Result<Void> ConfirmPhoneCode(@RequestBody UserPhoneRegister userPhoneRegister){
-        registerServiceImpl.ConfirmPhoneCode(userPhoneRegister);
-        return Result.success();
+    @Operation(summary = "确认验证码（phone）")
+    public Result<UserLoginInfo> ConfirmPhoneCode(@RequestBody UserPhoneRegister userPhoneRegister){
+        UserLoginInfo ul = registerServiceImpl.ConfirmPhoneCode(userPhoneRegister);
+        return Result.success(ul);
     }
     @PostMapping("/ConfirmEmailCode")
-    @Operation(summary = "确认验证码")
-    public Result<Void> ConfirmPhoneCode(@RequestBody UserEmailRegister userEmailRegister){
-        registerServiceImpl.ConfirmEmailCode(userEmailRegister);
-        return Result.success();
+    @Operation(summary = "确认验证码（email）")
+    public Result<UserLoginInfo> ConfirmPhoneCode(@RequestBody UserEmailRegister userEmailRegister){
+        UserLoginInfo ul = registerServiceImpl.ConfirmEmailCode(userEmailRegister);
+        return Result.success(ul);
     }
 }

@@ -2,11 +2,10 @@ package com.proj.manio.util;
 
 import com.proj.manio.DTO.UserLogin;
 import com.proj.manio.VO.UserLoginInfo;
+import com.proj.manio.exception.NoLoginException;
 import com.proj.manio.pojo.Admin;
 import com.proj.manio.pojo.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -37,9 +36,15 @@ public class JWTUtil {
     }
 
     public static Claims parseToken(String token) {//解析token
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
-    }
+            try {
+                return Jwts.parser()
+                        .setSigningKey(SECRET_KEY)
+                        .parseClaimsJws(token)
+                        .getBody();
+            } catch (ExpiredJwtException e) {
+                throw new NoLoginException("登录已过期，请重新登录");
+            } catch (JwtException e) {
+                throw new NoLoginException("Token 无效");
+            }
+        }
 }

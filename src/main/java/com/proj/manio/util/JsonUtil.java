@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -31,6 +32,9 @@ public class JsonUtil {
                 new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
         objectMapper.registerModule(javaTimeModule);
+        // 关闭时间戳写法
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         // 可选：让 Jackson 不因未知字段报错
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
@@ -55,19 +59,19 @@ public class JsonUtil {
     // JSON 转泛型
     public static <T> T fromJson(String json, TypeReference<T> typeReference) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(json, typeReference);
+            return objectMapper.readValue(json, typeReference);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("JSON转泛型失败", e);
         }
     }
+
     // JSON 转List
     public static <T> List<T> toList(String json, Class<T> clazz) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, clazz));
+            return objectMapper.readValue(json, objectMapper.getTypeFactory()
+                    .constructCollectionType(List.class, clazz));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("JSON转List失败", e);
         }
     }
 }
