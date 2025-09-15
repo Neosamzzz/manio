@@ -15,6 +15,12 @@ public class GlobalExceptionHandler {
         return Result.error("服务器异常，请稍后再试");
     }
 
+    @ExceptionHandler(NormalException.class)
+    public Result<String> handleException(HttpServletRequest request, NormalException e) {
+        e.printStackTrace();
+        return Result.error(e.getMessage());
+    }
+
     @ExceptionHandler(NoLoginException.class)//未登录异常
     public Result<String> handleException(HttpServletRequest request,NoLoginException e){
         e.printStackTrace();

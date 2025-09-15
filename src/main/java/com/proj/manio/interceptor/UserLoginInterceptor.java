@@ -24,11 +24,13 @@ public class UserLoginInterceptor implements HandlerInterceptor {
         if (token == null || token.isEmpty()) {//没有token
             throw new NoLoginException();
         }
-        token = token.substring(7);
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         Claims claims = jwtUtil.parseToken(token);
         Integer Id = claims.get("id", Integer.class);
         String identityType = claims.get("identityType", String.class);
-        if (Id == null && identityType.equals("user")) {//token无效或者不是用户账号
+        if (Id == null || identityType.equals("user")) {//token无效或者不是用户账号
             throw new NoLoginException();
         }
 
