@@ -98,9 +98,11 @@ public class ProductServiceImpl implements ProductService {
         productMapper.updateDetailImage(img);
     }
 
+    @Transactional
     @Override
     public void deleteImageById(int id) {
         productMapper.deleteImageById(id);
+
     }
 
     @Override

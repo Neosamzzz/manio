@@ -60,7 +60,7 @@ public class AliyunOSS {
                 ossClient.shutdown();
             }
         }
-        return endpoint.split("//")[0]+"//"+bucketName+"."+endpoint.split("//")[1]+"/"+objectName;
+        return endpoint.split("//")[0]+"//"+bucketName+"."+endpoint.split("//")[1]+"/"+objectName;// 返回url
 
     }
     public void remove(String objectName) throws com.aliyuncs.exceptions.ClientException, ClientException, IOException {
