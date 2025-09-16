@@ -30,9 +30,9 @@ public class MaterialController {
 
     @Operation(summary = "上传新素材")
     @PostMapping
-    public Result<Void> addFile(MultipartFile[] files) throws IOException, ClientException {
+    public Result<String> addFile(MultipartFile[] files) throws IOException, ClientException {
         materialServiceImpl.addFiles(files);
-        return Result.success();
+        return Result.success("上传成功");
     }
 
     @Operation(summary = "删除素材")

@@ -12,7 +12,7 @@ public interface MaterialMapper {
     @Select("SELECT * FROM material")
     List<Material> getAllMaterial();
 
-    @Insert("INSERT INTO material(file_name, file_url) VALUES (#{fileName},#{fileUrl})")
+    @Insert("INSERT INTO material(file_name, file_url,uuid) VALUES (#{fileName},#{fileUrl},#{uuid})")
     void addFile(Material m);
 
     

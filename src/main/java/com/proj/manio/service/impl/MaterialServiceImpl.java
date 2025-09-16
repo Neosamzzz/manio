@@ -44,15 +44,16 @@ public class MaterialServiceImpl implements MaterialService {
 
             byte[] File = file.getBytes();
             String fileName = file.getOriginalFilename();
+            String uuid = UUID.randomUUID().toString();
 
             // 上传oss
-            String OSS_NAME = "Material/"+UUID.randomUUID().toString()+fileName;
+            String OSS_NAME = "Material/"+uuid+fileName;
             String fileUrl = aliyunOSS.uuidUpload(File,OSS_NAME);
 
             Material m = new Material();
             m.setFileName(fileName);
             m.setFileUrl(fileUrl);
-
+            m.setUuid(uuid);
             materialMapper.addFile(m);
         }
     }
@@ -61,7 +62,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public void deleteFiles(Integer[] ids) throws ClientException, IOException {
         for(Integer id : ids){
-            // 查找uuid
+            // 查找
             Material m = materialMapper.getUuid(id);
 
             String OSS_NAME = "Material/"+m.getUuid()+m.getFileName();
