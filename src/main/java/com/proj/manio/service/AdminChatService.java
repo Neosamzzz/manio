@@ -12,5 +12,5 @@ public interface AdminChatService {
 
     List<MessageVO> getHistory(Integer adminId,Integer userId);
 
-    Set<String> getUnreadUsers();
+    Set<Integer> getUnreadUsers();
 }

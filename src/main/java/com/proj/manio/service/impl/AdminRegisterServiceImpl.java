@@ -28,7 +28,6 @@ public class AdminRegisterServiceImpl implements AdminRegisterService {
         if(adminRegisterMapper.getAdminByUsername(admin.getUsername())!=null){
             throw new NormalException("用户名已存在");
         }
-
         String pw = encoder.encode(admin.getPassword());
         Admin a = new Admin();
         a.setUsername(admin.getUsername());
@@ -51,19 +50,20 @@ public class AdminRegisterServiceImpl implements AdminRegisterService {
     public AdminLoginInfo adminAlterPw(Admin admin) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();//加密工具
 
-        Integer ID = admin.getId();
-        Admin a = adminRegisterMapper.getAdminById(ID);// 查找用户
+        String username = admin.getUsername();
+        Admin a = adminRegisterMapper.getAdminByUsername(username);// 查找用户
         if(a==null){
             throw new NormalException("用户不存在");
         }
 
         String pw = encoder.encode(admin.getPassword());
 
-        adminRegisterMapper.updateAdmin(ID,pw);// 更新
+        adminRegisterMapper.updateAdmin(username,pw);// 更新
 
+        Integer id = adminRegisterMapper.getIdByUsername(username);
         // 生成新token
         AdminLoginInfo adminLoginInfo = new AdminLoginInfo();
-        adminLoginInfo.setId(ID);
+        adminLoginInfo.setId(id);
         adminLoginInfo.setUsername(a.getUsername());
         adminLoginInfo.setToken(JWTUtil.generateAdminToken(a));
 

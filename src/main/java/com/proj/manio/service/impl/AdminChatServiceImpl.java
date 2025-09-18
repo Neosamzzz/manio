@@ -42,12 +42,13 @@ public class AdminChatServiceImpl implements AdminChatService {
 
     //获取未读列表
     @Override
-    public Set<String> getUnreadUsers() {
+    public Set<Integer> getUnreadUsers() {
         Integer adminId = UserHolder.get();
         Map<Object, Object> entries = stringRedisTemplate.opsForHash().entries("chat:unread:admin:" + adminId);
         return entries.keySet()
                 .stream()
                 .map(Object::toString)
+                .map(Integer::parseInt)
                 .collect(Collectors.toSet());
     }
 }

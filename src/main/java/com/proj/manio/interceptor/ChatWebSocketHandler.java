@@ -61,6 +61,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         m.setId(MESSAGE_ID);
         m.setUserId(USER_ID);
         m.setDirection(mVO.getDirection());
+        m.setCreateTime(LocalDateTime.now());
         m.setMessageText(MESSAGE_TEXT);
 
         switch (mVO.getDirection()) {//查看方向

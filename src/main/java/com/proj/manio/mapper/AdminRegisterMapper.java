@@ -14,9 +14,9 @@ public interface AdminRegisterMapper {
     @Select("SELECT * FROM admin WHERE username = #{username}")
     Admin getAdminByUsername(String username);
 
-    @Select("SELECT * FROM admin WHERE id = #{id}")
-    Admin getAdminById(Integer id);
+    @Select("SELECT id FROM admin WHERE username = #{username}")
+    Integer getIdByUsername(String username);
 
-    @Update("UPDATE admin SET password = #{pw} WHERE id = #{ID}")
-    void updateAdmin(Integer id, String pw);
+    @Update("UPDATE admin SET password = #{pw} WHERE username = #{username}")
+    void updateAdmin(String username, String pw);
 }

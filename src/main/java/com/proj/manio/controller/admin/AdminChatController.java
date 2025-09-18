@@ -33,7 +33,7 @@ public class AdminChatController {
      */
     @Operation(summary = "获取未读列表")
     @GetMapping("/unread")
-    public Result<Set<String>> getUnreadUsers() {
+    public Result<Set<Integer>> getUnreadUsers() {
         return Result.success(adminChatServiceImpl.getUnreadUsers());
     }
 

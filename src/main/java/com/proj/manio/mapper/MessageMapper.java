@@ -12,7 +12,14 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 public interface MessageMapper {
-    @Select("SELECT m.user_id AS userId,m.create_time AS createTime,m.message_text AS messageText FROM message m INNER JOIN (SELECT user_id, MAX(create_time) AS max_time FROM message GROUP BY user_id) t ON m.user_id = t.user_id AND m.create_time = t.max_time ORDER BY m.create_time DESC")
+    @Select("SELECT m.user_id, m.create_time, m.message_text\n" +
+            "FROM message m\n" +
+            "INNER JOIN (\n" +
+            "  SELECT user_id, MAX(create_time) AS max_time\n" +
+            "  FROM message\n" +
+            "  GROUP BY user_id\n" +
+            ") t ON m.user_id = t.user_id AND m.create_time = t.max_time\n" +
+            "ORDER BY m.create_time DESC")
     List<ChatOverviewVO> getAllChat();
 
     @Select("SELECT * FROM message WHERE user_id = #{id} ORDER BY create_time ")
