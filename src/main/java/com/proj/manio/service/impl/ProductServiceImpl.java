@@ -38,23 +38,23 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public PageInfo<Product> getProduct(int pageNum,int categoryId) {
-        // 判断redis有没有更改
-        if(stringRedisTemplate.opsForValue().get("productChanged：categoryId:"+categoryId) != null){
-            stringRedisTemplate.delete("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum));
-        }
+//        // 判断redis有没有更改
+//        if(stringRedisTemplate.opsForValue().get("productChanged：categoryId:"+categoryId) != null){
+//            stringRedisTemplate.delete("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum));
+//        }
 
 
-        String json = stringRedisTemplate.opsForValue().get("Manage:Category_Page:"+String.valueOf(categoryId)+"_"+String.valueOf(pageNum));
-        if(json!=null){
-            return new PageInfo<>(JsonUtil.toList(json,Product.class));
-        }
+//        String json = stringRedisTemplate.opsForValue().get("Manage:Category_Page:"+String.valueOf(categoryId)+"_"+String.valueOf(pageNum));
+//        if(json!=null){
+//            return new PageInfo<>(JsonUtil.toList(json,Product.class));
+//        }
         PageHelper.startPage(pageNum,10);
         List<Product> products = productMapper.getProduct(categoryId);
-        if (products==null|| products.isEmpty()){//为空时存空缓存
-            stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum),"[]",30,TimeUnit.MINUTES);
-            return new PageInfo<>(Collections.emptyList());
-        }
-        stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+pageNum,JsonUtil.toJson(products),30,TimeUnit.MINUTES);
+//        if (products==null|| products.isEmpty()){//为空时存空缓存
+//            stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum),"[]",30,TimeUnit.MINUTES);
+//            return new PageInfo<>(Collections.emptyList());
+//        }
+//        stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+pageNum,JsonUtil.toJson(products),30,TimeUnit.MINUTES);
         return new PageInfo<>(products);
     }
 

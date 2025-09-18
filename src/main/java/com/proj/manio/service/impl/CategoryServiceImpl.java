@@ -1,6 +1,7 @@
 package com.proj.manio.service.impl;
 
 import com.github.pagehelper.PageInfo;
+import com.proj.manio.VO.CategoryVO;
 import com.proj.manio.mapper.CategoryMapper;
 import com.proj.manio.pojo.Category;
 import com.proj.manio.pojo.Product;
@@ -27,13 +28,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> listEnable() {
-        return categoryMapper.listEnable();
+        return categoryMapper.list();
     }
 
     @Override
     public void createCategory(Category category) {
         category.setCreateTime(LocalDateTime.now());
         categoryMapper.createCategory(category);
+        // 更改后获取放在redis
+        List<CategoryVO> categoryVO = categoryMapper.listEnable();
+        stringRedisTemplate.delete("categoryVO:");
+        stringRedisTemplate.opsForValue().set("categoryVO:",JsonUtil.toJson(categoryVO));
     }
 
     @Override
