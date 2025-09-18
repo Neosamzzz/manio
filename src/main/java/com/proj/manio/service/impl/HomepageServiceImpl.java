@@ -57,7 +57,7 @@ public class HomepageServiceImpl implements HomepageService {
     @Override
     public void updateHomepage(List<Homepage> homepage) {
         homepageMapper.delete();
-        stringRedisTemplate.delete("home");
+        stringRedisTemplate.delete("home:");
         for(Homepage h : homepage){
             homepageMapper.updateHomepage(h);
         }

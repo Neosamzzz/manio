@@ -35,13 +35,13 @@ public class WebConfig implements WebMvcConfigurer {
         interceptorRegistry.addInterceptor(logInterceptor)
                 .addPathPatterns("/**");
 
-//        interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
-//                .addPathPatterns("/manage/**","/upload")
-//                .excludePathPatterns("/Login/Admin","/AdminRegister");
+        interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
+                .addPathPatterns("/manage/**","/upload","/deletefile")
+                .excludePathPatterns("/Login/Admin","/AdminRegister");
 //
 //        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
 //                .addPathPatterns("/me", "/cart") // 用户功能需要登录
-//        .excludePathPatterns("/login/user", "/register/**"); // 登录注册放行
+//        .excludePathPatterns("/Login/User", "/register/**"); // 登录注册放行
 //}
     }
 

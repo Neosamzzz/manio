@@ -23,7 +23,7 @@ public interface ProductService {
 
     void updateDetailImage(Image img);
 
-    void deleteImageById(int id);
+    void deleteImage(Image img);
 
     List<Image> getImgById(Integer id);
 }

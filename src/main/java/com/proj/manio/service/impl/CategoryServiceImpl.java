@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public List<Category> listEnable() {
+    public List<Category> list() {
         return categoryMapper.list();
     }
 
@@ -37,17 +37,26 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.createCategory(category);
         // 更改后获取放在redis
         List<CategoryVO> categoryVO = categoryMapper.listEnable();
-        stringRedisTemplate.delete("categoryVO:");
         stringRedisTemplate.opsForValue().set("categoryVO:",JsonUtil.toJson(categoryVO));
     }
 
     @Override
     public void updateCategory(Category category) {
+        // 更改后获取放在redis
+        stringRedisTemplate.delete("ProductList:categoryId:"+category.getId());
+        List<CategoryVO> categoryVO = categoryMapper.listEnable();
+        stringRedisTemplate.opsForValue().set("categoryVO:",JsonUtil.toJson(categoryVO));
+
         categoryMapper.updateCategory(category);
     }
 
     @Override
     public void deleteCategory(Integer id) {
+        // 更改后获取放在redis
+        stringRedisTemplate.delete("ProductList:categoryId:"+id);
+        List<CategoryVO> categoryVO = categoryMapper.listEnable();
+        stringRedisTemplate.opsForValue().set("categoryVO:",JsonUtil.toJson(categoryVO));
+
         categoryMapper.deleteCategory(id);
     }
 

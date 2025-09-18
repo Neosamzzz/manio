@@ -31,6 +31,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         }
         ProductDetailVO productDetailVO = productDetailMapper.getById(id);
 
+        productDetailVO.setProductId(id);
         if(productDetailVO==null||productDetailVO.getStatus()!=1){
             stringRedisTemplate.opsForValue().set("Detail_ProductId:"+String.valueOf(id),"{}",1, TimeUnit.MINUTES);
             throw new ProductNotExistException();

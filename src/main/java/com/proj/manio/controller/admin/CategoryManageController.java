@@ -22,7 +22,7 @@ public class CategoryManageController {
     @Operation(summary = "获取分类列表")
     @GetMapping("/list")
     public Result<List<Category>> listCategory(){
-        return Result.success(categoryServiceImpl.listEnable());
+        return Result.success(categoryServiceImpl.list());
     }
 
     @Operation(summary = "新增商品类别")

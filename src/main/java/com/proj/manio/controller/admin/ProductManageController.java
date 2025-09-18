@@ -78,7 +78,7 @@ public class ProductManageController {
     public Result<Void> deleteDetailImage(@RequestBody Image img) throws ClientException, IOException {
         String url = img.getImgUrl();
         aliyunOSS.remove(url.substring(url.lastIndexOf("/")+1));
-        productServiceImpl.deleteImageById(img.getId());
+        productServiceImpl.deleteImage(img);
         return Result.success();
     }
 

@@ -38,32 +38,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public PageInfo<Product> getProduct(int pageNum,int categoryId) {
-//        // 判断redis有没有更改
-//        if(stringRedisTemplate.opsForValue().get("productChanged：categoryId:"+categoryId) != null){
-//            stringRedisTemplate.delete("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum));
-//        }
 
-
-//        String json = stringRedisTemplate.opsForValue().get("Manage:Category_Page:"+String.valueOf(categoryId)+"_"+String.valueOf(pageNum));
-//        if(json!=null){
-//            return new PageInfo<>(JsonUtil.toList(json,Product.class));
-//        }
         PageHelper.startPage(pageNum,10);
         List<Product> products = productMapper.getProduct(categoryId);
-//        if (products==null|| products.isEmpty()){//为空时存空缓存
-//            stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+String.valueOf(pageNum),"[]",30,TimeUnit.MINUTES);
-//            return new PageInfo<>(Collections.emptyList());
-//        }
-//        stringRedisTemplate.opsForValue().set("Manage:Category_Page:"+categoryId+"_"+pageNum,JsonUtil.toJson(products),30,TimeUnit.MINUTES);
+
         return new PageInfo<>(products);
     }
 
     @Transactional
     @Override
     public void addProduct(Product product) {
+        // redis更新
+        stringRedisTemplate.delete("ProductList:categoryId:"+product.getCategoryId());
         product.setCreateTime(LocalDateTime.now());
         productMapper.addProduct(product);
-        stringRedisTemplate.opsForValue().set("productChanged：categoryId： "+product.getCategoryId(),String.valueOf(System.currentTimeMillis()));
     }
 
     @Override
@@ -76,32 +64,36 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     @Override
     public void updateProduct(Product product) {
+        stringRedisTemplate.delete("Detail_ProductId:"+product.getId());
         productMapper.updateProduct(product);
-        stringRedisTemplate.opsForValue().set("productChanged：categoryId： "+product.getCategoryId(),String.valueOf(System.currentTimeMillis()));
     }
 
     @Transactional
     @Override
     public void deleteById(Integer id) {
         Product product = productMapper.getById(id);
+        stringRedisTemplate.delete("Detail_ProductId:"+product.getId());
+        stringRedisTemplate.delete("ProductList:categoryId:"+product.getCategoryId());
         productMapper.deleteById(id);
-        stringRedisTemplate.opsForValue().set("productChanged：categoryId： "+product.getCategoryId(),String.valueOf(System.currentTimeMillis()));
     }
 
     @Override
     public void addDetailImage(Image img) {
+        stringRedisTemplate.delete("Detail_ProductId:"+img.getProductId());
         productMapper.addDetailImage(img);
     }
 
     @Override
     public void updateDetailImage(Image img) {
+        stringRedisTemplate.delete("Detail_ProductId:"+img.getProductId());
         productMapper.updateDetailImage(img);
     }
 
     @Transactional
     @Override
-    public void deleteImageById(int id) {
-        productMapper.deleteImageById(id);
+    public void deleteImage(Image img) {
+        stringRedisTemplate.delete("Detail_ProductId:"+img.getProductId());
+        productMapper.deleteImageById(img.getId());
 
     }
 
