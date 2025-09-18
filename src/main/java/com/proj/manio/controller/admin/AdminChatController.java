@@ -7,6 +7,7 @@ import com.proj.manio.service.impl.AdminChatServiceImpl;
 import com.proj.manio.util.UserHolder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 @Tag(name = "客服对话")
 @RestController
 @RequestMapping("/manage/chat")
@@ -43,8 +45,9 @@ public class AdminChatController {
     @Operation(summary = "获取单个用户消息历史并建立webSocket链接")
     @GetMapping("/{userId}")
     public Result<List<MessageVO>> getHistory(@PathVariable Integer userId) {
+
         Integer adminId = UserHolder.get();
+        log.info("传入id"+userId);
         return Result.success(adminChatServiceImpl.getHistory(adminId,userId));
     }
-
 }

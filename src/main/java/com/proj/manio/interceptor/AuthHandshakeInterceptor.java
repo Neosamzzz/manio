@@ -3,6 +3,7 @@ package com.proj.manio.interceptor;
 import com.proj.manio.exception.NoLoginException;
 import com.proj.manio.util.JWTUtil;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class AuthHandshakeInterceptor implements HandshakeInterceptor {
     @Autowired
@@ -32,6 +34,7 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
             }
         }
 
+        log.info("token"+token);
         // 2. 如果 Header 没有，再看 query 参数
         if (token == null) {
             String query = request.getURI().getQuery();
@@ -43,6 +46,7 @@ public class AuthHandshakeInterceptor implements HandshakeInterceptor {
         if (token != null) {
             Claims claims = jwtUtil.parseToken(token);
             attributes.put("userId", claims.get("id", Integer.class));
+            log.info(claims.get("identityType", String.class));
             attributes.put("identityType", claims.get("identityType", String.class));
         } else {
             throw new NoLoginException();

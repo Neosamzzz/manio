@@ -56,8 +56,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         //用时间加上id拼成消息id
         String NOW = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         Long MESSAGE_ID = Long.valueOf(NOW.substring(0,6)+IdUtil.generateUserId(NOW+USER_ID));
-        String MESSAGE_TEXT = mVO.getMessageText();//Message内容
-
+        String MESSAGE_TEXT = mVO.getMessageText();
+        //Message内容
         m.setId(MESSAGE_ID);
         m.setUserId(USER_ID);
         m.setDirection(mVO.getDirection());
@@ -72,12 +72,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 for(Admin a : allAdmin){
                     stringRedisTemplate.opsForHash().put("chat:unread:admin:"+a.getId(),String.valueOf(USER_ID),"0");//先插入redis做缓存未读消息
                 }
-                log.info("插入数据库");
                 messageMapper.addMessage(m);// 插入数据库
                 // 发送消息
                 for (WebSocketSession s : sessions.values()) {
-                    if (s.isOpen() && s.getAttributes().get("identityType").equals("admin")) {
+                    if (s.isOpen() && "admin".equals(String.valueOf(s.getAttributes().get("identityType")))) {
                         m.setDirection(0);
+                        log.info("在线："+mVO.getAdminId());
+                        System.out.println("发送给管理员："+s.getAttributes().get("userId"));
                         s.sendMessage(new TextMessage(json));
                     }
                 }
@@ -85,10 +86,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             case 1: // 发送到用户
                 m.setAdminId((Integer)session.getAttributes().get("userId"));
 //                        stringRedisTemplate.opsForList().rightPush("TOuserId:"+USER_ID,NOW,JsonUtil.toJson(m));
-                WebSocketSession userSession = sessions.get(USER_ID);
+                WebSocketSession userSession = sessions.get("user" + USER_ID);
                 messageMapper.addMessage(m);// 插入数据库
+                log.info("给用户"+USER_ID);
                 if (userSession != null && userSession.isOpen()) {
-                    userSession.sendMessage(new TextMessage(JsonUtil.toJson(mVO)));
+                    userSession.sendMessage(new TextMessage(json));
                 }
                 break;
         }
@@ -96,7 +98,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        sessions.remove(session.getId());
+        String key = session.getAttributes().get("identityType").toString() + session.getAttributes().get("userId").toString();
+        sessions.remove(key);
         System.out.println("断开连接: " + session.getId());
     }
 }

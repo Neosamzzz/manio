@@ -8,6 +8,7 @@ import com.proj.manio.pojo.Result;
 import com.proj.manio.service.AdminChatService;
 import com.proj.manio.util.JsonUtil;
 import com.proj.manio.util.UserHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class AdminChatServiceImpl implements AdminChatService {
     @Autowired
@@ -36,7 +38,9 @@ public class AdminChatServiceImpl implements AdminChatService {
     @Override
     public List<MessageVO> getHistory(Integer adminId,Integer userId) {
         // 已读
-        stringRedisTemplate.opsForHash().delete("chat:unread:admin"+adminId,userId);
+        log.info("开始查");
+        stringRedisTemplate.opsForHash().delete("chat:unread:admin:"+adminId,String.valueOf(userId));
+        log.info("已读完");
         return messageMapper.getChatHistory(userId);
     }
 
