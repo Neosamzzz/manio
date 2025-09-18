@@ -52,7 +52,7 @@ public class RegisterServiceImpl implements RegisterService {
             throw new NormalException("手机号或者验证码错误");
         }
         User user = new User();
-        Integer id = IdUtil.generateUserIdByPhone(phone);
+        Integer id = IdUtil.generateUserId(phone);
         user.setId(id);
         user.setPhone(phone);
         user.setCreateTime(LocalDateTime.now());
@@ -88,7 +88,7 @@ public class RegisterServiceImpl implements RegisterService {
             throw new NormalException("邮箱或者验证码错误");
         }
         User user = new User();
-        Integer id = IdUtil.generateUserIdByPhone(email);
+        Integer id = IdUtil.generateUserId(email);
         user.setId(id);
         user.setEmail(email);
         user.setCreateTime(LocalDateTime.now());

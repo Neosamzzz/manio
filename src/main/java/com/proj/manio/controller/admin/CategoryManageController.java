@@ -13,7 +13,7 @@ import java.util.List;
 
 @Tag(name="分类")
 @RestController
-@RequestMapping("/Category")
+@RequestMapping("/manage/Category")
 public class CategoryManageController {
     @Autowired
     private CategoryServiceImpl categoryServiceImpl;

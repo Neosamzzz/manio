@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/material")
+@RequestMapping("/manage/Material")
 @Tag(name = "素材管理")
 public class MaterialController {
 

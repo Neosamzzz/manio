@@ -2,6 +2,7 @@ package com.proj.manio.interceptor;
 
 import com.proj.manio.exception.NoLoginException;
 import com.proj.manio.util.JWTUtil;
+import com.proj.manio.util.UserHolder;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,9 +33,10 @@ public class LogInterceptor implements HandlerInterceptor {
             try {
                 Claims claims = jwtUtil.parseToken(token);
                 Integer id = claims.get("id", Integer.class);
+                UserHolder.set(id);
                 log.info("用户 {} 请求", id);
             } catch (Exception ex) {
-                log.warn("Token 无效: {}", token);
+                log.warn("Token 解析失败: {}, 错误={}", token, ex.getMessage(), ex);
             }
         }
 
@@ -49,6 +51,7 @@ public class LogInterceptor implements HandlerInterceptor {
         long duration = System.currentTimeMillis() - START_TIME.get();
         String uri = request.getRequestURI();
         System.out.println("[请求结束]"+uri+"时间："+duration+"ms");
+        UserHolder.remove();
         START_TIME.remove();
     }
 }

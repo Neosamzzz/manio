@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ProductManage")
+@RequestMapping("/manage/Product")
 @Tag(name="商品管理")
 public class ProductManageController {
     @Autowired
