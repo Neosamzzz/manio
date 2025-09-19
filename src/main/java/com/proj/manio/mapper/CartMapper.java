@@ -10,14 +10,11 @@ import java.util.List;
 
 
 public interface CartMapper {
-    @Select("SELECT product_id,price,name,cover_img,quantity FROM cart c LEFT JOIN product p ON c.user_id = #{id} AND product_id = p.id")
+    @Select("SELECT c.product_id, p.price, p.name, p.cover_img FROM cart c INNER JOIN product p ON c.product_id = p.id WHERE c.user_id = #{id} ORDER BY c.create_time")
     List<CartProduct> getCartById(int id);
 
-    @Insert("INSERT INTO cart(user_id,product_id,quantity) VALUES (#{userId},#{productId},#{quantity})")
+    @Insert("INSERT INTO cart(user_id,product_id,create_time) VALUES (#{userId},#{productId},#{createTime})")
     void addProductToCart(Cart cart);
-
-    @Update("UPDATE cart SET quantity=#{quantity} WHERE user_id=#{userId} AND id=#{id}")
-    void updateProductQuantityInCart(Cart cart);
 
     @Delete("DELETE FROM cart where id=#{id}")
     void deleteCartById(int id);

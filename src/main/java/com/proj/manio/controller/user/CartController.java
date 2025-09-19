@@ -33,13 +33,6 @@ public class CartController {
         return Result.success();
     }
 
-    @PutMapping
-    @Operation(summary = "修改购物车某个商品数量")
-    public Result<Void> updateProductQuantityInCart(@RequestBody Cart cart){
-        cartServiceImpl.updateProductQuantityInCart(cart);
-        return Result.success();
-    }
-
     @DeleteMapping
     @Operation(summary = "从购物车删除商品")
     public Result<Void> deleteProductInCart(@RequestParam int id){

@@ -20,7 +20,7 @@ public class JWTUtil {
                 .claim("id", admin.getId())
                 .claim("username", admin.getUsername())
                 .claim("identityType","admin")
-//                .setExpiration(new Date(System.currentTimeMillis() + 3600000*24*30)) // 30天过期天数
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000*24*30)) // 30天过期天数
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
@@ -30,7 +30,7 @@ public class JWTUtil {
                 .setSubject("user-login")
                 .claim("id", userLoginInfo.getId())
                 .claim("identityType","user")
-//                .setExpiration(new Date(System.currentTimeMillis() + 3600000*24*30)) // 30天过期天数
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000*24*30)) // 30天过期天数
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
