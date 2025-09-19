@@ -28,6 +28,19 @@ public class ForgetPasswordController {
         registerServiceImpl.setFirstPassword(firstPasswordDTO);
         return Result.success();
     }
+    @GetMapping("/VarifiPhoneCode/{phone}")
+    @Operation(summary = "（改密）用户接受验证码（phone）")
+    public Result<Void> getCodeByPhone(@PathVariable String phone){
+        registerServiceImpl.getCodePhone(phone);
+        return Result.success();
+    }
+
+    @GetMapping("/VarifiEmailCode/{email}")
+    @Operation(summary = "（改密）用户接受验证码（email）")
+    public Result<Void> getCodeByEmail(@PathVariable String email){
+        registerServiceImpl.getCodeEmail(email);
+        return Result.success();
+    }
 
     @PutMapping
     @Operation(summary = "更改密码")

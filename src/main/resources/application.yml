@@ -12,8 +12,8 @@ spring:
     application:
         name: manio
     datasource:
-        url: jdbc:mysql://120.26.253.150:3306/manio?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
-        username: neo
+        url: jdbc:mysql://127.0.0.1:3306/manio?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+        username: root
         password: My123456!
         driver-class-name: com.mysql.cj.jdbc.Driver
     servlet:

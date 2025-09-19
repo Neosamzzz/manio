@@ -33,9 +33,9 @@ public class CartController {
         return Result.success();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @Operation(summary = "从购物车删除商品")
-    public Result<Void> deleteProductInCart(@RequestParam int id){
+    public Result<Void> deleteProductInCart(@PathVariable Integer id){
         cartServiceImpl.deleteCartByid(id);
         return Result.success();
     }

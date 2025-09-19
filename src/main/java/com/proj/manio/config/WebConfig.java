@@ -39,9 +39,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/manage/**","/upload","/deletefile")
                 .excludePathPatterns("/Login/Admin","/AdminRegister");
 //
-//        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
-//                .addPathPatterns("/me", "/cart","/userChat") // 用户功能需要登录
-//        .excludePathPatterns("/Login/User", "/register/**"); // 登录注册放行
+        interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
+                .addPathPatterns("/me", "/cart","/userChat") // 用户功能需要登录
+        .excludePathPatterns("/Login/User", "/register/**"); // 登录注册放行
 //}
     }
 

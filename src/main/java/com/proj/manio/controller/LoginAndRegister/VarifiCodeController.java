@@ -21,14 +21,14 @@ public class VarifiCodeController {
     private RegisterServiceImpl registerServiceImpl;
 
     @GetMapping("/VarifiPhoneCode/{phone}")
-    @Operation(summary = "用户接受验证码（phone）")
+    @Operation(summary = "（注册）用户接受验证码（phone）")
     public Result<Void> getCodeByPhone(@PathVariable String phone){
         registerServiceImpl.getCodeByPhone(phone);
         return Result.success();
     }
 
     @GetMapping("/VarifiEmailCode/{email}")
-    @Operation(summary = "用户接受验证码（email）")
+    @Operation(summary = "（注册）用户接受验证码（email）")
     public Result<Void> getCodeByEmail(@PathVariable String email){
         registerServiceImpl.getCodeByEmail(email);
         return Result.success();

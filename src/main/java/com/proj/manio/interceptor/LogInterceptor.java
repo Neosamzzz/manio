@@ -24,21 +24,21 @@ public class LogInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         START_TIME.set(System.currentTimeMillis());
 
-        // 获取用户
-        String token = request.getHeader("Authorization");
-        if (StringUtils.hasText(token)) {//有token
-            if (token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
-            try {
-                Claims claims = jwtUtil.parseToken(token);
-                Integer id = claims.get("id", Integer.class);
-                UserHolder.set(id);
-                log.info("用户 {} 请求", id);
-            } catch (Exception ex) {
-                log.warn("Token 解析失败: {}, 错误={}", token, ex.getMessage(), ex);
-            }
-        }
+//        // 获取用户
+//        String token = request.getHeader("Authorization");
+//        if (StringUtils.hasText(token)) {//有token
+//            if (token.startsWith("Bearer ")) {
+//                token = token.substring(7);
+//            }
+//            try {
+//                Claims claims = jwtUtil.parseToken(token);
+//                Integer id = claims.get("id", Integer.class);
+//                UserHolder.set(id);
+//                log.info("用户 {} 请求", id);
+//            } catch (Exception ex) {
+//                log.warn("Token 解析失败: {}, 错误={}", token, ex.getMessage(), ex);
+//            }
+//        }
 
         String method = request.getMethod();
         String uri = request.getRequestURI();

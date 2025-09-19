@@ -32,6 +32,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Autowired
     private LoginMapper loginMapper;
 
+    // 注册发送验证码
     @Override
     public void getCodeByPhone(String phone) {
         //判断是否是手机号
@@ -39,8 +40,26 @@ public class RegisterServiceImpl implements RegisterService {
             throw new NormalException("手机号格式错误");
         }
         // 判断在不在数据库
-        if(registerMapper.PhoneAlreadyRegister(phone)!=0){
+        Integer e = registerMapper.PhoneAlreadyRegister(phone);
+        if(e!=0){
             throw new NormalException("手机号已经注册");
+        }
+        Integer code  = RandomUtil.randomInt(100000, 1000000);
+        log.info("手机："+phone+"验证码："+code);
+        stringRedisTemplate.opsForValue().set("Phone:VarifiCode:"+phone,String.valueOf(code),15, TimeUnit.MINUTES);
+    }
+
+    // 改密码发送验证码
+    @Override
+    public void getCodePhone(String phone) {
+        //判断是否是手机号
+        if(RegexUtils.isPhoneInvalid(phone)){
+            throw new NormalException("手机号格式错误");
+        }
+        // 判断在不在数据库
+        Integer e = registerMapper.PhoneAlreadyRegister(phone);
+        if(e==0){
+            throw new NormalException("手机号未注册");
         }
         Integer code  = RandomUtil.randomInt(100000, 1000000);
         log.info("手机："+phone+"验证码："+code);
@@ -78,14 +97,31 @@ public class RegisterServiceImpl implements RegisterService {
         return ul;
     }
 
+    // 注册发送验证码
     @Override
     public void getCodeByEmail(String email) {//判断是否是邮箱
         if(RegexUtils.isEmailInvalid(email)){
             throw new NormalException("邮箱格式错误");
         }
         // 判断在不在数据库
-        if(registerMapper.PhoneAlreadyRegister(email)!=0){
+        Integer e = registerMapper.emailAlreadyRegister(email);
+        if(e!=0){
             throw new NormalException("该邮箱已经注册");
+        }
+        Integer code  = RandomUtil.randomInt(100000, 1000000);
+        log.info("邮箱："+email+"验证码："+code);
+        stringRedisTemplate.opsForValue().set("Email:VarifiCode:"+email,String.valueOf(code),15, TimeUnit.MINUTES);
+    }
+    // 改密码发送验证码
+    @Override
+    public void getCodeEmail(String email) {//判断是否是邮箱
+        if(RegexUtils.isEmailInvalid(email)){
+            throw new NormalException("邮箱格式错误");
+        }
+        // 判断在不在数据库
+        Integer e = registerMapper.emailAlreadyRegister(email);
+        if(e==0){
+            throw new NormalException("该邮箱未注册");
         }
         Integer code  = RandomUtil.randomInt(100000, 1000000);
         log.info("邮箱："+email+"验证码："+code);

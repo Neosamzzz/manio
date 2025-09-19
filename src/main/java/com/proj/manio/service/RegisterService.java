@@ -8,6 +8,10 @@ public interface RegisterService {
 
     UserLoginInfo ConfirmPhoneCode(UserPhoneRegister userPhoneRegister);
 
+    void getCodePhone(String phone);
+
+    void getCodeEmail(String email);
+
     void getCodeByEmail(String email);
 
     UserLoginInfo ConfirmEmailCode(UserEmailRegister userEmailRegister);
