@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,7 +62,7 @@ public class UploadCotroller {
 
     @Operation(summary = "删除文件")
     @DeleteMapping("/deletefile")
-    public Result<String> upload(String[] fileName) throws IOException, ClientException {
+    public Result<String> upload(@RequestBody String[] fileName) throws IOException, ClientException {
         String deletename = "[";
         for (String file : fileName) {
             aliyunOSS.remove(file);

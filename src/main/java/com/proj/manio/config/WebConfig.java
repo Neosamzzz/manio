@@ -36,7 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**");
 
         interceptorRegistry.addInterceptor(adminLoginInterceptor)//注册管理员登录拦截器
-                .addPathPatterns("/manage/**","/upload","/deletefile")
+                .addPathPatterns("/manage/**")
                 .excludePathPatterns("/Login/Admin","/AdminRegister");
 //
         interceptorRegistry.addInterceptor(userLoginInterceptor)//注册用户登录拦截器
