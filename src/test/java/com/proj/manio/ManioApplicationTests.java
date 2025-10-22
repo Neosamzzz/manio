@@ -6,6 +6,8 @@ import com.proj.manio.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import com.google.genai.Client;
+import com.google.genai.types.GenerateContentResponse;
 
 import java.io.IOException;
 
@@ -19,7 +21,16 @@ class ManioApplicationTests {
 
 	@Test
 	void test() throws ClientException, IOException {
-		aliyunOSS.remove("converted_让我看看.png");
+		// The client gets the API key from the environment variable `GEMINI_API_KEY`.
+		Client client = new Client();
+
+		GenerateContentResponse response =
+				client.models.generateContent(
+						"gemini-2.5-flash",
+						"hello",
+						null);
+
+		System.out.println(response.text());
 
 	}
 

@@ -30,7 +30,7 @@ public class UserLoginInterceptor implements HandlerInterceptor {
         Claims claims = jwtUtil.parseToken(token);
         Integer Id = claims.get("id", Integer.class);
         String identityType = claims.get("identityType", String.class);
-        if (Id == null || identityType.equals("user")) {//token无效或者不是用户账号
+        if (Id == null || !identityType.equals("user")) {//token无效或者不是用户账号
             throw new NoLoginException();
         }
 
