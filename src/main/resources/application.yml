@@ -9,12 +9,17 @@ spring:
                 max-idle: 8
                 min-idle: 0
                 max-wait: -1
+    rabbitmq:
+        host: 127.0.0.1
+        port: 5672
+        username: guest
+        password: guest
     application:
         name: manio
     datasource:
         url: jdbc:mysql://127.0.0.1:3306/manio?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
         username: root
-        password: My123456!
+        password: 139601
         driver-class-name: com.mysql.cj.jdbc.Driver
     servlet:
         multipart:
@@ -70,5 +75,7 @@ mybatis:
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         map-underscore-to-camel-case: true
+redisson:
+    address: redis://127.0.0.1:6379
 
 
